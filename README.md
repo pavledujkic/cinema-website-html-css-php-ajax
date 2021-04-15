@@ -1,18 +1,18 @@
-Opis aplikacije
+Application description
 
-Ova aplikacija predstavlja veb sajt koji služi za rad sa filmovima i glumcima. Aplikacijom su omogućene CRUD operacije nad filmovima i glumcima kao i njihovo povezivanje i razvezivanje.
+This application is a website that is used to work with movies and actors. The application enables CRUD operations on films and actors, as well as their linking and unlinking.
 
-Sajt se sastoji iz četiri stranice:
--	Index.html – početna stranica, ne sadrži ništa
--	filmovi.html – služi za prikaz, izmenu i brisanje  filmova i povezivanje i razvezivanje glumaca i filmova. Prilikom učitavanja stranice šalje se GET zahtev za svim filmovima iz baze. Kada podaci stignu sa servera vrši se njihov prikaz u vidu kartica. Svaki film ima dugme izbriši(POST zahtev za brisanjem)  i izmeni. Klikom na dugme izmeni otvara se modalna forma sa popunjenim podacima od filma. Sa desne strane nalazi se lista glumaca u filmu kao i padajući meni sa svim glumcima i dugmići dodaj i obriši koji pozivaju server da uradi pomenute akcije . Klikom na dugme izmeni šalje se POST zahtev za ažuriranjem filma.
--	glumci.html – služi za prikaz, dodavanje, izmenu glumaca u bazi. Sadrži tabelu svih glumaca i formu za unos novog glumca.  Sve CRUD se izvršavaju na isti način kao i u prošlom slučaju sa tim što se pri učitavanju stranice.
--	dodajFilm.html – sadrži formu za unos novog filma. Pri učitavanju šalje se GET zahtev za svim žanrovima, a klikom na dugme šalje se POST zahtev za dodavanjem novog filma u bazu.
+The site consists of four pages:
+- Index.html - home page, contains nothing
+- filmovi.html - used to view, edit and delete movies and link and unlink actors and movies. When the page loads, a GET request is sent for all movies in the database. When the data arrives from the server, it is displayed in the form of cards. Each movie has a delete (POST request to delete) and edit button. Clicking on the edit button opens a modal form with filled data from the movie. On the right side there is a list of actors in the film as well as a drop down menu with all the actors and add and delete buttons that invite the server to do the mentioned actions. Clicking the edit button sends a POST request to update the movie.
+- glumci.html - used to display, add, change actors in the database. It contains a table of all actors and a form for entering a new actor. All CRUDs are executed in the same way as in the previous case.
+- addFilm.html - contains a form for entering a new movie. When loading, a GET request for all genres is sent, and by clicking on the button, a POST request is sent to add a new movie to the database.
 
-Za povezivanje sa serverom koriste se AJAX tehnologije implementirane u jQuery – ju.
+AJAX technologies implemented in jQuery are used to connect to the server.
 
-Na serveru imamo pet fajla i to:
--	broker.php – služi za konekciju na bazu. 
--	filmovi.php – služi za obradu zahteva vezanih za filmove. Prilikom obrade GET zahteva poziva se broker da vrati podatke iz baze koje se, zatim, pakuju u JSON i kao takve šalju klijentu. Prilikom obrade UPDATE zahteva prvo se vrši validacija podataka pa se tek onda, ako su podaci dobri, poziva broker, a kao odgovor šalje se poruka o tome da li je operacija uspešno izvršena.
--	glumci.php – služi za obradu zahteva vezanih za glumce. Sam proces rada je gotovo identičan kao kod fajla filmovi.php.
--	zanrovi.php – obrađuje samo GET zahtev za svim žanrovima iz baze koje šalje u JSON formatu.
--	dodajFilm.php – prihvata podatake o filmu, skida sliku, validira podatke (isti uslovi kao i za UPDATE) i poziva brokera da ih zapamti.
+We have five files on the server, as follows:
+- broker.php - used to connect to the database.
+- filmovi.php - is used to process requests related to movies. When processing the GET request, the broker is invited to return the data from the database, which is then packed in JSON and sent to the client as such. When processing the UPDATE request, the data is first validated, and only then, if the data is good, the broker is called, and in response, a message is sent about whether the operation was successfully performed.
+- glumci.php - is used to process requests related to actors. The work process itself is almost identical to the movies.php file.
+- zanrovi.php - processes only the GET request for all genres from the database that it sends in JSON format.
+- addFilm.php - accepts movie data, downloads the image, validates the data (same conditions as for UPDATE) and invites the broker to remember it.
