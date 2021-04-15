@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.css" rel=" stylesheet">
+    <link rel="stylesheet" href="style.css">
+    <title>Glumci</title>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light sticky-top">
+        <a class="navbar-brand" href="index.html">Glumci</a>
+        <button class="navbar-toggler collapsed" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="navbar-collapse collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto">
+                <li class="nav-item active mx-auto">
+                    <a class="nav-link" href="index.html">Početna</a>
+                </li>
+                <li class="nav-item mx-auto">
+                    <a class="nav-link" href="filmovi.html">Prikaz filmova</a>
+                </li>
+                <li class="nav-item mx-auto">
+                    <a class="nav-link" href="glumci.html">Prikaz glumaca</a>
+                </li>
+                <li class="nav-item mx-auto">
+                    <a class="nav-link" href="dodajFilm.html">Dodaj film</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <div id="omotac">
+        <div id="glumci">
+            <table class="table display">
+                <tr>
+                    <th scope="col">Ime i prezime</th>
+                    <th scope="col">Godina rodjenja</th>
+                </tr>
+                <tbody id="glumciBody">
+
+                </tbody>
+            </table>
+
+        </div>
+        <div id="formaZaNovogGlumca">
+            <form class="mt-5">
+                <div class="form-group">
+                    <input type="text" class="form-control" id="ime" placeholder="Ime">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" type="text" id="prezime" placeholder="Prezime">
+                </div>
+                <div class="form-group">
+                    <input type="text" class="form-control" type="number" id="godinaRodjenja"
+                        placeholder="Godina rodjenja">
+                </div>
+                <div class="form-group">
+                    <button class="btn btn-primary" id="dodajGlumca">Dodaj glumca</button>
+                    <button class="btn btn-primary" id="izmeniGlumca" hidden="true">Izmeni glumca</button>
+                    <button class="btn btn-primary" id="vratiSe" hidden="true">Vrati nazad</button>
+                </div>
+                <input type="text" id="idGlumca" hidden="true" />
+            </form>
+
+        </div>
+    </div>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+    <script>
+        $(document).ready(function () {
+            ucitajGlumce();
+            $("#vratiSe").click(function (e) {
+                e.preventDefault();
+                $("#dodajGlumca").attr("hidden", false);
+                $("#izmeniGlumca").attr("hidden", true);
+                $("#vratiSe").attr("hidden", true);
+                $("#ime").val("");
+                $("#prezime").val("");
+                $("#godinaRodjenja").val("");
+                $("#idGlumca").val("");
+            })
+            $("#izmeniGlumca").click(function (e) {
+                e.preventDefault();
+                let ime = $("#ime").val();
+                let prezime = $("#prezime").val();
+                let starost = $("#godinaRodjenja").val();
+                let id = $("#idGlumca").val();
+                $.post("./backend/glumci.php", { metoda: "izmeni", ime: ime, prezime: prezime, starost: starost, id: id }, function (data) {
+                    if (data !== "200")
+                        alert(data);
+                    ucitajGlumce();
+                })
+            })
+            $("#dodajGlumca").click(function (e) {
+                e.preventDefault();
+                let ime = $("#ime").val();
+                let prezime = $("#prezime").val();
+                let starost = $("#godinaRodjenja").val();
+                $.post("./backend/glumci.php", { metoda: "dodaj", ime: ime, prezime: prezime, starost: starost }, function (data) {
+                    if (data !== "200")
+                        alert(data);
+                    ucitajGlumce();
+                })
+            })
+
+        })
+
+        function ucitajGlumce() {
+            $.getJSON("./backend/glumci.php", { metoda: "vratiSve" }, function (data) {
+                console.log(data);
+                if (data.status !== "200") {
+                    alert(data.status);
+                    return;
+                }
+                $("#glumciBody").html("");
+                for (let glumac of data.glumci) {
+                    $("#glumciBody").append(`
+                    <tr>
+                        <td>${glumac.ime + " " + glumac.prezime} </td>
+                        <td>${glumac.starost}</td>
+                       <td> <button class="dugmeUnutarTabele" id=${glumac.id}-IzmeniGlumca >Izmeni</button> </td>
+                       <td> <button class="dugmeUnutarTabele" id=${glumac.id}-ObrisiGlumca  >Obrisi</button> </td>
+                    </tr>
+                    `);
+                    $(`#${glumac.id}-IzmeniGlumca`).click(function (e) {
+                        e.preventDefault();
+                        napuniFormu(glumac.id, glumac.ime, glumac.prezime, glumac.starost);
+                    })
+                    $(`#${glumac.id}-ObrisiGlumca`).click(function (e) {
+                        e.preventDefault();
+                        $.post("./backend/glumci.php", { metoda: "obrisi", id: glumac.id }, function (data) {
+                            if (data !== "200")
+                                alert(data);
+                            ucitajGlumce();
+                        })
+                    })
+                }
+            })
+        }
+        function napuniFormu(id, ime, prezime, starost) {
+            $("#dodajGlumca").attr("hidden", true);
+            $("#izmeniGlumca").attr("hidden", false);
+            $("#vratiSe").attr("hidden", false);
+            $("#ime").val(ime);
+            $("#prezime").val(prezime);
+            $("#godinaRodjenja").val(starost);
+            $("#idGlumca").val(id);
+        }
+    </script>
+</body>
+
+</html>
