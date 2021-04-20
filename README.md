@@ -16,3 +16,7 @@ We have five files on the server, as follows:
 - glumci.php - is used to process requests related to actors. The work process itself is almost identical to the movies.php file.
 - zanrovi.php - processes only the GET request for all genres from the database that it sends in JSON format.
 - addFilm.php - accepts movie data, downloads the image, validates the data (same conditions as for UPDATE) and invites the broker to remember it.
+
+Preview:
+
+<img src="https://user-images.githubusercontent.com/81970183/115446653-d23b9600-a217-11eb-8b0d-fc7a547489a3.png" width="45%"></img> <img src="https://user-images.githubusercontent.com/81970183/115446655-d2d42c80-a217-11eb-847d-9a5a50ef0073.png" width="45%"></img> <img src="https://user-images.githubusercontent.com/81970183/115446660-d36cc300-a217-11eb-83b3-6d8155398662.png" width="45%"></img> <img src="https://user-images.githubusercontent.com/81970183/115446662-d4055980-a217-11eb-88f2-cb267d2790e2.png" width="45%"></img> 
